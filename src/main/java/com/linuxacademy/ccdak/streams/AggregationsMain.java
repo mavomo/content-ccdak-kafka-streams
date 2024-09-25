@@ -7,7 +7,7 @@ import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
-import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.*;
 
 public class AggregationsMain {
 
@@ -23,10 +23,20 @@ public class AggregationsMain {
 
         // Get the source stream.
         final StreamsBuilder builder = new StreamsBuilder();
-        final KStream<String, String>source = builder.stream("streams-input-topic");
-        source.to("streams-output-topic");
+        final KStream<String, String>source = builder.stream("aggregations-input-topic");
+        KGroupedStream<String, String> groupedStream = source.groupByKey();
 
-        //Implement streams logic.
+        KTable<String, Integer> aggregatedTable = groupedStream.aggregate(() -> 0, (aggKey, newValue, aggValue) -> aggValue + newValue.length(),
+                Materialized.with(Serdes.String(), Serdes.Integer()));
+
+        aggregatedTable.toStream().to("aggregations-output-charactercount-topic", Produced.with(Serdes.String(), Serdes.Integer()));
+
+        // Count the number of records for each key
+        KTable<String, Long> countedTable = groupedStream.count(Materialized.with(Serdes.String(), Serdes.Long()));
+        countedTable.toStream().to("aggregations-output-count-topic", Produced.with(Serdes.String(), Serdes.Long()));
+
+        KTable<String, String> reducedTable = groupedStream.reduce((aggValue, newValue) -> aggValue + " " + newValue);
+        reducedTable.toStream().to("aggregations-output-reduce-topic");
 
         final Topology topology = builder.build();
         final KafkaStreams streams = new KafkaStreams(topology, props);
