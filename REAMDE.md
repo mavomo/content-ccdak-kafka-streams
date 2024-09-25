@@ -47,3 +47,24 @@ ginning  --bootstrap-server broker:29092
 Résultat:
 
 ![img.png](img.png)
+
+
+### Joining Streams 
+
+5 kafka sessions 
+2 producers
+>  ./kafka-console-producer.sh  --bootstrap-server broker:29092 --topic joins-input-topic-left --property parse.key=true --property key.separator=:
+>  ./kafka-console-producer.sh  --bootstrap-server broker:29092 --topic joins-input-topic-right --property parse.key=true --property key.separator=:
+3 consumers
+
+** Inner Join 
+> ./kafka-console-consumer.sh --topic inner-join-output-topic --property print.key=true --property  --from-
+beginning --bootstrap-server broker:29092
+
+** Left join
+>  ./kafka-console-consumer.sh --topic left-join-output-topic --property print.key=true --property  --from-
+beginning --bootstrap-server broker:29092
+> 
+
+## Join session : résultats
+![img_1.png](img_1.png)
