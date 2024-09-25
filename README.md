@@ -2,8 +2,7 @@
 Ce repo est clôné du repertoire de aCloudGuru (anciennement linuxacademy) et porte essentiellement sur les exercices autour de Kafka-Streams.
 Ici j'ai : 
 1. Mis à jour le repo pour qu'il supporte JUnit 5, Java 17 s'exécute sur Gradle 7.3
-2. Rajouté un fichier `docker-compose.yml` pour permettre à chacun de s'entraîner avec un cluster local
-        - Pour en savoir plus, voir [ici](https://developer.confluent.io/confluent-tutorials/kafka-on-docker/)
+2. Rajouté un fichier `docker-compose.yml` pour permettre à chacun de s'entraîner avec un [cluster local](https://developer.confluent.io/confluent-tutorials/kafka-on-docker/)
 3. implémenter les opérations attendues dans la vidéo. 
 
 ### Démarrer 
@@ -81,3 +80,7 @@ beginning --bootstrap-server broker:29092
 
 ## Join session : résultats
 ![img_1.png](images/joined-streams.png)
+
+
+Cloned from : 
+> [LinuxAcademy](https://github.com/linuxacademy/content-ccdak-kafka-streams)
